@@ -122,7 +122,6 @@ public class v_login extends javax.swing.JFrame {
             boolean valid = ctrl.checkData(status, jTextField1.getText(), jTextField2.getText());
             
             if (valid){
-                ctrl.setNama(jTextField1.getText().toString());
                 if ("admin".equals(status)){
                     v_admin admin = new v_admin();
                     admin.setVisible(true);
@@ -137,6 +136,7 @@ public class v_login extends javax.swing.JFrame {
                 }
                 this.setVisible(false);
                 JOptionPane.showMessageDialog(rootPane, "Berhasil Login");
+                ctrl.setNama(jTextField1.getText().toString());
             }
             else{
                 JOptionPane.showMessageDialog(rootPane, "Username, password, atau role salah");

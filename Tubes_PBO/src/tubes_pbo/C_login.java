@@ -12,9 +12,6 @@ import java.sql.*;
 public class C_login {
     private static String nama;
     
-    public C_login(){
-    }
-    
     public void setNama(String nama){
         C_login.nama = nama;
     }

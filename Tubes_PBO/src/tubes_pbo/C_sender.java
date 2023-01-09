@@ -16,10 +16,6 @@ public class C_sender {
     private final DefaultListModel<Barang> listModelBarang = new DefaultListModel<>();
     C_login log = new C_login();
     
-    public C_sender(){
-    
-    }
-    
     public void loadDataTransaksi(){//load data untuk ditampilkan pada jList
         try {
             Class.forName("com.mysql.jdbc.Driver");
@@ -40,7 +36,7 @@ public class C_sender {
                 ResultSet rs = stmt.executeQuery(sql);
                 // Process the results
                 while (rs.next()) {
-                    Transaksi trs = new Transaksi(rs.getString("id_transaksi"));
+                    Transaksi trs = new Transaksi(rs.getString("username"));
                     listModelTransaksi.addElement(trs);
                 }
                 stmt.close();

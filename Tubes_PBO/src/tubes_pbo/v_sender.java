@@ -6,7 +6,6 @@
 package tubes_pbo;
 
 import javax.swing.JOptionPane;
-import javax.swing.ListModel;
 import objek.Transaksi;
 
 /**
@@ -21,7 +20,7 @@ public class v_sender extends javax.swing.JFrame {
     public v_sender() {
         initComponents();
         ctrlSender.loadDataTransaksi();
-//        jList1.setModel((ListModel<Transaksi>)ctrlSender.getListModelTransaksi());
+        jList1.setModel(ctrlSender.getListModelTransaksi());
     }
 
     /**
@@ -51,9 +50,9 @@ public class v_sender extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Sender");
 
-        jLabel1.setText("Hello, "+ctrlSender.log.getNama());
+        jLabel1.setText("Hello, <User>");
 
-        jLabel2.setText("Jumlah transaksi "+ctrlSender.getListModelTransaksi().size());
+        jLabel2.setText("Jumlah Transaksi : <?>");
 
         jButton3.setText("Kirim Barang Baru");
         jButton3.addActionListener(new java.awt.event.ActionListener() {
@@ -69,7 +68,6 @@ public class v_sender extends javax.swing.JFrame {
             }
         });
 
-        jList1.setModel(ctrlSender.getListModelTransaksi());
         jScrollPane1.setViewportView(jList1);
 
         jLabel3.setText("Daftar Transaksi Pribadi :");
@@ -124,7 +122,7 @@ public class v_sender extends javax.swing.JFrame {
                                 .addGap(0, 0, Short.MAX_VALUE))
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(jButton5, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 219, Short.MAX_VALUE)
+                                    .addComponent(jButton5, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 219, Short.MAX_VALUE)
                                     .addComponent(jButton6, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                     .addComponent(jButton3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                                 .addGap(6, 6, 6))))

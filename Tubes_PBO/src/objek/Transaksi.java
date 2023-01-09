@@ -23,7 +23,6 @@ public class Transaksi {
 
     public Transaksi(String nama_pengirim) {
         this.nama_pengirim = nama_pengirim;
-        this.id_transaksi = generateID();
     }
     private void TambahBarang(Barang[] barang){
         
@@ -59,9 +58,9 @@ public class Transaksi {
                 // Process the results
                 stmt.close();
                 conn.close();
-                this.id_transaksi = String.format("%s", nama_pengirim);
+                this.id_transaksi = String.format("%s_%d", nama_pengirim,(count+1));
                 System.out.println(id_transaksi);
-                return String.format("%s", nama_pengirim);
+                return String.format("%s_%d", nama_pengirim,(count+1));
             }
         } catch (SQLException e) {
             System.out.println("Error connecting to the database: " + e);
@@ -85,7 +84,6 @@ public class Transaksi {
         return id_transaksi;
     }
     
-    @Override
     public String toString(){
         return this.id_transaksi;
     }
