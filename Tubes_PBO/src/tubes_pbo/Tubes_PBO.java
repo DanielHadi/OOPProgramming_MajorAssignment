@@ -18,9 +18,10 @@ public class Tubes_PBO {
      */
     public static void main(String[] args) {
         // TODO code application logic here
-        Transaksi test = new Transaksi("Syafaza");
-        String test2 = test.generateID();
-        System.out.println(test2);
+        v_login frame = new v_login();
+        java.awt.EventQueue.invokeLater(() -> {
+            new v_login().setVisible(true);
+        });
     }
     
 }

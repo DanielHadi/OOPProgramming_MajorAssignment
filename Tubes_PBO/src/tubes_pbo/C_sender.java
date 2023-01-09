@@ -5,6 +5,7 @@
  */
 package tubes_pbo;
 import java.sql.*;
+import java.util.ArrayList;
 import javax.swing.DefaultListModel;
 import objek.*;
 /**
@@ -28,16 +29,60 @@ public class C_sender {
             String url = "jdbc:mysql://localhost:3306/tubespbo";
             String username = "root";
             String password = "";
+            
+            int current = getJmlTransaksi();
             try (Connection conn = DriverManager.getConnection(url, username, password)) {
                 System.out.println("Connected load transaksi");
                 // Execute a query
                 Statement stmt = conn.createStatement();
-                String sql = String.format("SELECT * FROM transaksi WHERE username = '%s'",log.getNama());
+                String sql = String.format("SELECT * FROM transaksi WHERE username = '%s'",C_login.getNama());
                 ResultSet rs = stmt.executeQuery(sql);
+
                 // Process the results
+                setZeroTransaksi(C_login.getNama());
                 while (rs.next()) {
                     Transaksi trs = new Transaksi(rs.getString("username"));
                     listModelTransaksi.addElement(trs);
+                }
+//                stmt.executeUpdate(String.format("UPDATE jmltransaksi SET jumlah = %d WHERE username = '%s'",current, C_login.getNama()));
+                
+                stmt.close();
+                conn.close();
+            }
+        } catch (SQLException e) {
+            System.out.println("Error connecting to the database: " + e);
+        }
+    }
+    public void setZeroTransaksi(String name){
+        try {
+            String url = "jdbc:mysql://localhost:3306/tubespbo";
+            String username = "root";
+            String password = "";
+            try (Connection conn = DriverManager.getConnection(url, username, password)) {
+                System.out.println("Connected set zero transaksi");
+                // Execute a query
+                Statement stmt = conn.createStatement();
+                stmt.executeUpdate(String.format("UPDATE jmltransaksi SET jumlah = 0 WHERE username = '%s'",name));
+                stmt.close();
+                conn.close();
+            }
+        } catch (SQLException e) {
+            System.out.println("Error connecting to the database: " + e);
+        }
+    }
+    public int getJmlTransaksi(){
+        try {
+            String url = "jdbc:mysql://localhost:3306/tubespbo";
+            String username = "root";
+            String password = "";
+            try (Connection conn = DriverManager.getConnection(url, username, password)) {
+                System.out.println("Connected get jumlah transaksi");
+                // Execute a query
+                Statement stmt = conn.createStatement();
+                ResultSet rs2 = stmt.executeQuery(String.format("SELECT jumlah FROM jmltransaksi WHERE username = '%s'",C_login.getNama()));
+                while (rs2.next()){
+                    return rs2.getInt(1);
+                    
                 }
                 stmt.close();
                 conn.close();
@@ -45,6 +90,7 @@ public class C_sender {
         } catch (SQLException e) {
             System.out.println("Error connecting to the database: " + e);
         }
+        return 0;
     }
     
     public DefaultListModel<Transaksi> getListModelTransaksi() {
@@ -71,8 +117,8 @@ public class C_sender {
                 ResultSet rs = stmt.executeQuery(sql);
                 // Process the results
                 while (rs.next()) {
-                    Barang brg = new Barang(rs.getString("nama_barang"),rs.getDouble("berat"),rs.getString("nama_penerima"),rs.getDouble("jarak"),rs.getString("alamat_pengiriman"));
-                    listModelBarang.addElement(brg);
+                    Barang brg1 = new Barang(rs.getString("nama_barang"),rs.getDouble("berat"),rs.getString("nama_penerima"),rs.getDouble("jarak"),rs.getString("alamat_pengiriman"));
+                    listModelBarang.addElement(brg1);
                 }
                 stmt.close();
                 conn.close();
@@ -86,7 +132,7 @@ public class C_sender {
         return listModelBarang;
     }
     
-    public void insertDataBarang(String nama_barang, double berat, String penerima, Double jarak, String alamat){
+    public void insertDataBarang(){
         try {
             String url = "jdbc:mysql://localhost:3306/tubespbo";
             String username = "root";
@@ -95,14 +141,61 @@ public class C_sender {
                 System.out.println("Connected insert barang");
                 // Execute a query
                 Statement stmt = conn.createStatement();
-                String sql = String.format("INSERT INTO barang (nama_barang, berat, nama_penerima, jarak, alamat_pengiriman) "
-                        + "VALUES ('%s',%f,'%s',%f,'%s');",nama_barang, berat, penerima, jarak, alamat);
+                String sql = String.format("INSERT INTO barang (id_transaksi, nama_barang, berat, nama_penerima, jarak, alamat_pengiriman) "
+                        + "SELECT id_transaksi, nama_barang, berat, nama_penerima, jarak, alamat_pengiriman FROM wrap");
 
                 stmt.executeUpdate(sql);
-//                this.listModelBarang.clear();
+//                Barang dummy = new Barang(nama_barang, berat, penerima, jarak, alamat);
+//                brg.add(dummy);
+                this.listModelBarang.clear();
+                
                 // Process the results
                 stmt.close();
                 conn.close();
+            }
+        } catch (SQLException e) {
+            System.out.println("Error connecting to the database: " + e);
+        }
+        
+    }
+    
+    public void insertDataWrap(String nama_barang, double berat, String penerima, Double jarak, String alamat){
+        try {
+            String url = "jdbc:mysql://localhost:3306/tubespbo";
+            String username = "root";
+            String password = "";
+            try (Connection conn = DriverManager.getConnection(url, username, password)) {
+                System.out.println("Connected insert wrap");
+                // Execute a query
+                Statement stmt = conn.createStatement();
+                String sql = String.format("INSERT INTO wrap (nama_barang, berat, nama_penerima, jarak, alamat_pengiriman) "
+                        + "VALUES ('%s',%f,'%s',%f,'%s');",nama_barang, berat, penerima, jarak, alamat);
+
+                stmt.executeUpdate(sql);       
+                // Process the results
+                stmt.close();
+                conn.close();
+            }
+        } catch (SQLException e) {
+            System.out.println("Error connecting to the database: " + e);
+        }
+    }
+    
+    public void setWraptoEmpty(){
+        try {
+            String url = "jdbc:mysql://localhost:3306/tubespbo";
+            String username = "root";
+            String password = "";
+            try (Connection conn = DriverManager.getConnection(url, username, password)) {
+                System.out.println("Connected set empty wrap");
+                // Execute a query
+                Statement stmt = conn.createStatement();
+                String sql = String.format("TRUNCATE TABLE wrap");
+                stmt.executeUpdate(sql);
+                // Process the results
+                stmt.close();
+                conn.close();
+                
             }
         } catch (SQLException e) {
             System.out.println("Error connecting to the database: " + e);
@@ -122,14 +215,31 @@ public class C_sender {
                         + "VALUES ('%s', %d, '%s');",id_transaksi, harga, pengirim);
 
                 stmt.executeUpdate(sql);
+                
                 this.listModelTransaksi.clear();
-                System.out.println("ini jumlah barang :"+listModelBarang.size());
-                for (int i=0;i<listModelBarang.size();i++){
-                    sql = String.format("UPDATE barang SET id_transaksi = '%s' WHERE id_barang = '%s'", id_transaksi,listModelBarang.get(i).getId_barang());
-                    stmt.executeUpdate(sql);
-                }
                 this.loadDataTransaksi();
-                this.listModelBarang.clear();
+                // Process the results
+                stmt.close();
+                conn.close();
+            }
+        } catch (SQLException e) {
+            System.out.println("Error connecting to the database: " + e);
+        }
+    }
+    
+    public void updateIDTransaksi(String id_transaksi){
+        try {
+            String url = "jdbc:mysql://localhost:3306/tubespbo";
+            String username = "root";
+            String password = "";
+            int current = getJmlTransaksi();
+            try (Connection conn = DriverManager.getConnection(url, username, password)) {
+                System.out.println("Connected update ID Transaksi di barang");
+                // Execute a query
+
+                Statement stmt = conn.createStatement();
+                String sql = String.format("UPDATE wrap SET id_transaksi = '%s'",id_transaksi);
+                stmt.executeUpdate(sql);
                 // Process the results
                 stmt.close();
                 conn.close();

@@ -12,12 +12,17 @@ import java.sql.*;
 public class C_login {
     private static String nama;
     
-    public void setNama(String nama){
+    public static void setNama(String nama){
         C_login.nama = nama;
+        
     }
 
-    public String getNama() {
-        return nama;
+    /**
+     *
+     * @return
+     */
+    public static String getNama() {
+        return C_login.nama;
     }
     
     public boolean checkData(String status, String uname, String pass){
@@ -32,11 +37,7 @@ public class C_login {
                 String sql = String.format("SELECT * FROM user WHERE username = '%s' AND password = '%s' AND role = '%s'",uname,pass,status);
                 ResultSet rs = stmt.executeQuery(sql);
                 // Process the results
-                if (!rs.next()){
-                    return false;
-                }else{
-                    return true;
-                }
+                return rs.next();
             }
         } catch (SQLException e) {
             System.out.println("Error connecting to the database: " + e);

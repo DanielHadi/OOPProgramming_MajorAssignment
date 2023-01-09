@@ -16,6 +16,9 @@ public class Admin extends User{
     private String password;
     private Transaksi[] arrayTransaksi;
     
+    public Admin(){
+        
+    }
     public Admin(String username, String password, String nama, String no_handphone){
         this.username = username;
         this.password = password;

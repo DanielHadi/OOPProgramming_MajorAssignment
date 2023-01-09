@@ -50,7 +50,7 @@ public class C_kurir {
         return listModel;
     }
     
-    public void kirimBarang(C_admin admin, String pengirim, String ID){
-        
+    public void kirimBarang(C_admin admin, String ID_barang){
+        admin.ubahStatusBarang(ID_barang);
     }
 }
