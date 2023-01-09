@@ -16,7 +16,7 @@ import java.sql.Statement;
  * @author omen
  */
 public class Barang {
-    protected final int BIAYA_PER_KG = 3000;
+    protected static final int BIAYA_PER_KG = 3000;
     public String nama_barang;
     public double berat_kiriman;
     private String resi;
@@ -29,6 +29,14 @@ public class Barang {
     public void setSiapDiKirim() {
         this.siapDiKirim = true;
     }
+    public double Getharga() {
+        return ((BIAYA_PER_KG* this.berat_kiriman) * this.jarak);
+    }
+
+    public static int getBIAYA_PER_KG() {
+        return BIAYA_PER_KG;
+    }
+    
 
     public Barang(String nama_barang, double berat_kiriman, String nama_penerima, double jarak, String alamat_pengiriman) {
         this.nama_barang = nama_barang;

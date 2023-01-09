@@ -5,6 +5,8 @@
  */
 package tubes_pbo;
 
+import java.sql.Date;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
@@ -246,7 +248,10 @@ public class v_sender extends javax.swing.JFrame {
         ctrlSender.checkOut(trs.getId_transaksi(), trs.getHarga_pengiriman(), C_login.getNama());
         ctrlSender.updateIDTransaksi(trs.getId_transaksi());
         ctrlSender.insertDataBarang();
+        System.out.println(trs.randomDate());
+        ctrlSender.updateHarga(trs.getId_transaksi(), trs.getHarga_pengiriman(),trs.randomDate());
         ctrlSender.setWraptoEmpty();
+        
         JOptionPane.showMessageDialog(rootPane, "Bukti Transaksi berhasil dibuat");
         SwingUtilities.updateComponentTreeUI(this);
     }//GEN-LAST:event_jButton6ActionPerformed

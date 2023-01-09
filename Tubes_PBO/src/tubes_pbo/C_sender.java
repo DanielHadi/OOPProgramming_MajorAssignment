@@ -5,6 +5,7 @@
  */
 package tubes_pbo;
 import java.sql.*;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import javax.swing.DefaultListModel;
 import objek.*;
@@ -202,7 +203,7 @@ public class C_sender {
         }
     }
     
-    public void checkOut(String id_transaksi, int harga, String pengirim){
+    public void checkOut(String id_transaksi, double harga, String pengirim){
         try {
             String url = "jdbc:mysql://localhost:3306/tubespbo";
             String username = "root";
@@ -212,7 +213,7 @@ public class C_sender {
                 // Execute a query
                 Statement stmt = conn.createStatement();
                 String sql = String.format("INSERT INTO transaksi (id_transaksi, harga_pengiriman, username)"
-                        + "VALUES ('%s', %d, '%s');",id_transaksi, harga, pengirim);
+                        + "VALUES ('%s', %f, '%s');",id_transaksi, harga, pengirim);
 
                 stmt.executeUpdate(sql);
                 
@@ -240,6 +241,29 @@ public class C_sender {
                 Statement stmt = conn.createStatement();
                 String sql = String.format("UPDATE wrap SET id_transaksi = '%s'",id_transaksi);
                 stmt.executeUpdate(sql);
+                // Process the results
+                stmt.close();
+                conn.close();
+            }
+        } catch (SQLException e) {
+            System.out.println("Error connecting to the database: " + e);
+        }
+    }
+    public void updateHarga (String id_transaksi, double harga, LocalDate tanggal){
+        try {
+            String url = "jdbc:mysql://localhost:3306/tubespbo";
+            String username = "root";
+            String password = "";
+            try (Connection conn = DriverManager.getConnection(url, username, password)) {
+                System.out.println("Connected");
+                // Execute a query
+                Statement stmt = conn.createStatement();
+               
+                
+                String sql = String.format("update transaksi set harga_pengiriman = %f , tanggal_pengiriman = %s WHERE id_transaksi = %s", harga,tanggal,  id_transaksi);
+                stmt.executeUpdate(sql);
+                
+               
                 // Process the results
                 stmt.close();
                 conn.close();

@@ -5,6 +5,8 @@
  */
 package objek;
 
+import java.util.Calendar;
+import java.util.Random;
 import java.time.LocalDate;
 import java.sql.*;
 import java.util.ArrayList;
@@ -27,11 +29,47 @@ public class Transaksi {
         this.nama_pengirim = nama_pengirim;
         generateID();
     }
-
-    public int getHarga_pengiriman() {
+    
+    
+    public LocalDate randomDate(){
         
-        return harga_pengiriman;
+        return LocalDate.now();
     }
+    public double getHarga_pengiriman() {
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
+        } catch (ClassNotFoundException e) {
+            System.out.println("Error loading driver: " + e);
+        }
+
+        // Connect to the database
+        try {
+            String url = "jdbc:mysql://localhost:3306/tubespbo";
+            String username = "root";
+            String password = "";
+            double harga = 0;
+            try (Connection conn = DriverManager.getConnection(url, username, password)) {
+                System.out.println("Connected load barang");
+                // Execute a query
+                Statement stmt = conn.createStatement();
+                String sql = String.format("SELECT berat,jarak FROM barang WHERE id_transaksi = '%s'",id_transaksi);
+                ResultSet rs = stmt.executeQuery(sql);
+                // Process the results
+                while (rs.next()) {
+                    harga = harga + (rs.getDouble("berat") * rs.getDouble("jarak") * Barang.getBIAYA_PER_KG());
+
+                }
+                
+                stmt.close();
+                conn.close();
+                return harga;
+            }
+        } catch (SQLException e) {
+            System.out.println("Error connecting to the database: " + e);
+        }
+        return 0;
+    }
+    
 
     public LocalDate getTanggal_kirim() {
         return tanggal_kirim;
